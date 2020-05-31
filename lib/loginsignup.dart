@@ -3,19 +3,14 @@ import 'package:flutter/material.dart';
 import 'auth.dart';
 
 class LoginSignupPage extends StatefulWidget {
-
-  LoginSignupPage(
-    {
-      this.onSignedIn,
-      this.auth,
-    }
-  );
+  LoginSignupPage({
+    this.onSignedIn,
+    this.auth,
+  });
   final AuthImplementation auth;
   final VoidCallback onSignedIn;
   @override
   _LoginSignupPageState createState() => _LoginSignupPageState();
-
-  
 }
 
 enum FormType { login, register }
@@ -36,27 +31,20 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     }
   }
 
-  void validateAndSubmit() async{
-
-    if(validateAndSave())
-    {
-      try
-      {
-        if(_formType==FormType.login)
-        {
+  void validateAndSubmit() async {
+    if (validateAndSave()) {
+      try {
+        if (_formType == FormType.login) {
           String userId = await widget.auth.signIn(_email, _password);
-          print("Register userId = "+ userId);
-        }
-        else{
+          print("Register userId = " + userId);
+        } else {
           String userId = await widget.auth.signUp(_email, _password);
-          print("Register userId = "+ userId);
+          print("Register userId = " + userId);
         }
 
         widget.onSignedIn();
-      }
-      catch(e)
-      {
-        print("error :"+e.toString());
+      } catch (e) {
+        print("error :" + e.toString());
       }
     }
   }

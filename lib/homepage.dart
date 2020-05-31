@@ -10,7 +10,6 @@ class HomePage extends StatefulWidget {
   final AuthImplementation auth;
   final VoidCallback onSignedOut;
 
-
   @override
   _HomePageState createState() => _HomePageState();
 }
