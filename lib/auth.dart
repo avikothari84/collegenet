@@ -27,7 +27,14 @@ class Auth implements AuthImplementation {
 
   Future<String> getCurrentUser() async{
     FirebaseUser user = await _firebaseAuth.currentUser();
-    return user.uid;
+    if(user==null)
+    {
+      return null;
+    }
+    else
+    {
+      return user.uid;
+    }
   }
 
   Future<void> signOut() async {
