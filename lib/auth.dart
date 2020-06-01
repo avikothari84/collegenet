@@ -1,6 +1,7 @@
 // import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+
 abstract class AuthImplementation {
   Future<String> signIn(String email, String password);
   Future<String> signUp(String email, String password);

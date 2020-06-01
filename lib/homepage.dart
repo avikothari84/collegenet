@@ -1,4 +1,8 @@
 import 'package:collegenet/auth.dart';
+import 'package:collegenet/info.dart';
+import 'package:collegenet/newpage.dart';
+import 'package:collegenet/timeline.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +19,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //variables 
+  PageController pageController;
+  int pageIndex = 0;
+
   //methods
   void _logoutUser() async {
     try{
@@ -26,7 +34,26 @@ class _HomePageState extends State<HomePage> {
       print("error: "+e.toString());
     }
   }
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
 
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  onPageChanged(int pageIndex){
+      setState(() {
+        this.pageIndex= pageIndex;
+      });
+  }
+  onTap(int pageIndex){
+    pageController.jumpToPage(pageIndex);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,29 +66,32 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
       ),
-      body: Container(),
-      bottomNavigationBar: new BottomAppBar(
-          color: Colors.pink,
-          child: Container(
-            margin: EdgeInsets.only(left:50.0,right:50.0),
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.exit_to_app),
-                onPressed: _logoutUser,
-                color: Colors.grey[600],
-                iconSize: 40.0,
-              ),
-              IconButton(
-                icon: Icon(Icons.file_upload),
-                onPressed: null,
-                color: Colors.grey[600],
-                iconSize: 40.0,
-              ),
-            ],
-          ))),
+      body: PageView(
+        children: <Widget>[
+          RaisedButton.icon(
+            onPressed: _logoutUser, 
+            icon: Icon(Icons.cancel),
+            label: Text("SignOut")
+          ),
+          InfoPage(),
+          TimelinePage(),
+          NewPage(),
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics()
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+          currentIndex: pageIndex,
+          onTap: onTap,
+          activeColor: Theme.of(context).primaryColor,
+          items: [
+            BottomNavigationBarItem(icon:Icon(Icons.whatshot)),
+            BottomNavigationBarItem(icon:Icon(Icons.notifications_active)),
+            BottomNavigationBarItem(icon:Icon(Icons.airline_seat_recline_extra)),
+            BottomNavigationBarItem(icon:Icon(Icons.access_alarm)),
+          ]
+          )
     );
   }
 }
